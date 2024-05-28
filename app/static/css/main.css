@@ -1,0 +1,48 @@
+.view_tab {
+    display: none;
+}
+
+.view_setup_tab {
+    display: none;
+}
+
+.media_768_warning {
+    display: none;
+}
+
+.no_connect_warning {
+    display: none;
+}
+
+.no_connect_warning_block {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    padding: 150px;
+    text-align: center;
+}
+
+@media (max-width:1370px) {
+    .card_block {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width:767px) {
+    .media_768_warning {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        padding: 150px;
+        text-align: center;
+    }
+}

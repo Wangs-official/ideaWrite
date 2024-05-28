@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>ideaWrite</title>
+    <title>ideaWrite灵感写</title>
     <meta name="viewport"
         content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <style>
@@ -18,34 +18,36 @@
         :not(:defined) {
             display: none;
         }
+
+        .wrapper {
+            height: 500px;
+            overflow-y: scroll;
+        }
     </style>
 </head>
 <script src="static/js/sober.min.js"></script>
+<script src="static/js/main.js"></script>
+<link rel="stylesheet" href="static/css/main.css">
 <link rel="stylesheet" href="static/css/bootstrap.min.css">
-
 
 <body>
     <s-page id="app" theme="auto">
-        <s-top-app-bar>
-            <s-top-app-bar>
-                <div slot="headline">💡 ideaWrite 灵感写 <s-chip>{{versionCode}}</s-chip> </div>
-                <s-icon-button slot="action">
-                    <s-icon type="search"></s-icon>
-                </s-icon-button>
-            </s-top-app-bar>
-        </s-top-app-bar>
         <div class="row">
             <div class="col-md-1">
-                <s-navigation mode="rail">
-                    <s-navigation-item onclick="window.location.href='#dashboard'">
-                        <s-icon type="home" slot="icon"></s-icon>
+                <s-navigation mode="rail" style="margin-top: 10px; margin-left:5px ;">
+                    <s-navigation-item onclick="showTab('Dashboard')">
+                        <s-icon slot="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path
+                                    d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z">
+                                </path>
+                            </svg></s-icon>
                         <div slot="text">仪表盘</div>
                     </s-navigation-item>
-                    <s-navigation-item onclick="window.location.href='#novel'">
+                    <s-navigation-item onclick="showTab('Novel')">
                         <s-icon type="menu" slot="icon"></s-icon>
                         <div slot="text">我的小说</div>
                     </s-navigation-item>
-                    <s-navigation-item onclick="window.location.href='#think'">
+                    <s-navigation-item onclick="showTab('Idea')">
                         <s-icon slot="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                 <path
@@ -55,7 +57,7 @@
                         </s-icon>
                         <div slot="text">我的灵感</div>
                     </s-navigation-item>
-                    <s-navigation-item onclick="window.location.href='#sync'">
+                    <s-navigation-item onclick="showTab('Sync')">
                         <s-icon slot="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                 <path
                                     d="M260-160q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H260Zm0-80h480q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-80q0-83-58.5-141.5T480-720q-83 0-141.5 58.5T280-520h-20q-58 0-99 41t-41 99q0 58 41 99t99 41Zm220-240Z">
@@ -63,7 +65,7 @@
                             </svg></s-icon>
                         <div slot="text">云间同步</div>
                     </s-navigation-item>
-                    <s-navigation-item onclick="window.location.href='#settings'">
+                    <s-navigation-item onclick="showTab('Settings')">
                         <s-icon slot="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                 <path
                                     d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z">
@@ -71,7 +73,7 @@
                             </svg></s-icon>
                         <div slot="text">设置</div>
                     </s-navigation-item>
-                    <s-navigation-item onclick="window.location.href='#about'">
+                    <s-navigation-item onclick="showTab('About')">
                         <s-icon slot="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
                                 <path
                                     d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z">
@@ -83,35 +85,172 @@
                 <!--navbar finish-->
             </div>
             <div class="col-md-11">
-                <!---->
-                <div style="padding: 20px;">
+
+                <div class="media_768_warning">
+                    <!--尺寸警告-->
+                    <h2 style="color: white;">⚠️</h2>
+                    <h3 style="color: white;">当前页面尺寸未被适配</h3>
+                    <b style="color: white;">请使用平板电脑或者电脑,详细了解可查看README中的 适配问题 部分</b>
+                </div>
+
+                <div class="no_connect_warning_block no_connect_warning">
+                    <!--尺寸警告-->
+                    <h2 style="color: white;">⚠️</h2>
+                    <h3 style="color: white;">连接后端 http://localhost:65371 失败</h3>
+                    <b style="color: white;">请检查后端程序控制台的输出,如果遇到了棘手的问题,请提交Issues<br>一般来说,重启一下就能用了(后端)</b>
+                </div>
+
+                <s-top-app-bar style="background: none;">
+                    <!--顶部栏-->
+                    <s-top-app-bar>
+                        <s-icon-button slot="navigation" onclick="showTab('NewPage')">
+                            <s-icon type="home"></s-icon>
+                        </s-icon-button>
+                        <div slot="headline" style="margin-left: 0.1px;">💡 ideaWrite 灵感写
+                            <s-chip>{{versionCode}}</s-chip>
+                        </div>
+                        <s-icon-button slot="action">
+                            <s-icon type="search"></s-icon>
+                        </s-icon-button>
+                    </s-top-app-bar>
+                </s-top-app-bar>
+
+                <div id="NewPage" class="view_tab" style="padding: 20px;">
+                    <!--新页面-->
                     <h2>👋</h2>
                     <h3>欢迎使用ideaWrite灵感写!</h3>
-                    <b>一款完全免费开源的本地小说编辑器</b><br><br>
-                    <s-button onclick="test_api()"> 测试后端服务 </s-button>
+                    <b>一款完全免费开源的本地小说编辑器</b><br>
+                    <b>上次使用在{{lastlogin}}</b><br><br>
                     <s-button type="filled-tonal"
-                        onclick="window.location.href='https://github.com/wangs-official/ideawrite'"
-                        style="margin-left: 10px;"> 去GitHub点个星星 </s-button><br><br><br>
-                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;">
+                        onclick="window.location.href='https://github.com/wangs-official/ideawrite'"> 去GitHub点个星星
+                    </s-button><br><br><br>
+                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;" class="card_block">
                         <div slot="headline">🤔 你知道吗</div>
                         <div slot="subhead">知道点好玩的</div>
                         <div slot="text">很多写小说软件都收费,但收费的都是基本功能,本来还想骂两句的,算了吧<br><br>其实这个项目是一个巨大的屎山,有一种刚学Html就出来秀的美<br>
                         </div>
                     </s-card>
-                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;">
+                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;" class="card_block">
                         <div slot="headline">☁️ 试试云间同步?</div>
                         <div slot="subhead">可连接到一些云服务商来备份你的数据</div>
                         <div slot="text">数据无价,灵感无价,备份十份数据才是每个作家该做的事</div>
-                        <s-button slot="action" onclick="window.location.href='#settings'">去试试</s-button>
+                        <s-button slot="action" onclick="showTab('Sync')">去试试</s-button>
                     </s-card>
-                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;">
-                        <div slot="headline">💻 看看仪表盘</div>
+                    <s-card type="filled" style="width: 500px;height: 250px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">📈 看看仪表盘</div>
                         <div slot="subhead">自己干了什么呢?</div>
                         <div slot="text">看看你用ideaWrite做了什么</div><br><br>
-                        <s-button slot="action" onclick="window.location.href='#dashboard'">看看</s-button>
+                        <s-button slot="action" onclick="showTab('Dashboard')">看看</s-button>
                     </s-card>
                 </div>
-                <!---->
+                <!--Pages-->
+                <div id="Dashboard" , class="view_tab" style="padding: 20px;">
+                    <h2>📈</h2>
+                    <h3>仪表盘</h3>
+                    <b>看看你用ideaWrite做了什么</b><br><br>
+                    <s-card type="filled" style="width: 500px;height: 100px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">{{Use_Time_Day}}天</div>
+                        <div slot="text">📅 您已经使用ideaWrite<br>
+                        </div>
+                    </s-card>
+                    <s-card type="filled" style="width: 500px;height: 100px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">{{All_Text}}字</div>
+                        <div slot="text">✍🏻 您已经写了<br>
+                        </div>
+                    </s-card>
+                    <s-card type="filled" style="width: 500px;height: 100px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">{{All_Think}}个灵感</div>
+                        <div slot="text">💡 您已经记录了<br>
+                        </div>
+                    </s-card>
+                    <s-card type="filled" style="width: 500px;height: 100px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">{{All_Book}}本书</div>
+                        <div slot="text">💪 您已经创建了<br>
+                        </div>
+                    </s-card>
+                </div>
+
+                <div id="Novel" , class="view_tab" style="padding: 20px;">
+                    <h2>📚</h2>
+                    <h3>我的小说</h3>
+                    <b>不要当鸽子哦</b><br><br>
+                    <s-fab extended="true" onclick="document.querySelector('#newbook_dialog').show()">
+                        <s-icon type="add" slot="start"></s-icon>
+                        创建新小说
+                    </s-fab><br><br>
+                    <div class="wrapper">     
+                        <s-table>
+                            <s-thead>
+                                <s-tr>
+                                    <s-th style="text-align: center; width: 200px;">标题</s-th>
+                                    <s-th style="text-align: center;">描述</s-th>
+                                    <s-th style="text-align: center;">创建时间</s-th>
+                                    <s-th style="text-align: center;">总章节/总字数</s-th>
+                                    <s-th style="text-align: center;">操作</s-th>
+                                </s-tr>
+                            </s-thead>
+                            {% for novelinfo in NovelInfo %}
+                            <s-tbody>
+                                <s-tr>
+                                    <s-td style="text-align: center;">{{novelinfo.title}}</s-td>
+                                    <s-td style="text-align: center;">{{novelinfo.about}}</s-td>
+                                    <s-td style="text-align: center;">{{novelinfo.CreateTime}}</s-td>
+                                    <s-td style="text-align: center;">共{{novelinfo.allChapter}}章/共{{novelinfo.allText}}字</s-td>
+                                    <s-td style="text-align: center;"><s-button onclick="window.location.href='http://localhost:65370/editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
+                                </s-tr>
+                            </s-tbody>
+                            {% endfor %}
+                        </s-table>
+                        <br>
+                        <b style="color: gray;">Tips:打开编辑器,在编辑器的 编辑资料 页面就可以删除小说了,别问,问就是这里放不下<br>如果你的小说在 app/data/novel 文件夹下,但是没有出现在列表里,这种情况一般是非常规导入小说后发生的,请在 设置->扫描小说文件夹 来刷新列表<br>请一定不要直接操作小说文件夹(例如直接删除),这是和数据库挂钩的,直接删除等操作会导致读取不出来小说列表(直接报错),没有专业环境修复很困难<br>只要你不乱动,好好在前端用,出问题的概率约等于零 :)</b>
+                    </div>
+                </div>
+
+                <div id="Idea" , class="view_tab" style="padding: 20px;">
+                    <h2>💡</h2>
+                    <h3>我的灵感</h3>
+                    <b>当愿望过于强烈时,灯泡就会出现在人的脑袋上...</b><br><br>
+                    <s-scroll-view>
+                        <div style="height: 1080px;width: 2200px">
+
+                        </div>
+                    </s-scroll-view>
+                </div>
+
+                <div id="Sync" , class="view_tab" style="padding: 20px;">
+                    <h2>☁️</h2>
+                    <h3>云上同步</h3>
+                    <b>备份数据到网盘</b><br><br>
+                </div>
+
+                <div id="Settings" , class="view_tab" style="padding: 20px;">
+                    <h2>💻</h2>
+                    <h3>设置</h3>
+                    <b>调整ideaWrite的设置</b><br><br>
+                </div>
+
+                <div id="About" , class="view_tab" style="padding: 20px;">
+                    <h2>✍🏻</h2>
+                    <h3>关于ideaWrite</h3>
+                    <b>当前版本:{{versionCode}}</b><br>
+                    <hr>
+                    <h5>前端框架</h5>
+                    <p>使用了 <a href="https://soberjs.com/">SoberJS</a> 框架</p><br>
+                    <h5>后端框架</h5>
+                    <p>使用了Python以及Flask</p><br>
+                    <h5>制作者</h5>
+                    <p>由Wangs_official制作,项目归于MewCako(喵咖可)组织之下</p><br>
+                    <h5>开源协议</h5>
+                    <p>MIT LICENSE</p><br>
+                </div>
+                <!--Pages end-->
+                <!--dialog-->
+                <s-dialog id="newbook_dialog">
+                    <div slot="headline"> 创建新小说 </div>
+                    <s-button slot="action" type="text">取消</s-button>
+                    <s-button slot="action" type="text">确定</s-button>
+                </s-dialog>
+                <!--dialog end-->
             </div>
         </div>
     </s-page>
