@@ -196,7 +196,7 @@
                                     <s-td style="text-align: center;">{{novelinfo.about}}</s-td>
                                     <s-td style="text-align: center;">{{novelinfo.CreateTime}}</s-td>
                                     <s-td style="text-align: center;">共{{novelinfo.allChapter}}章/共{{novelinfo.allText}}字</s-td>
-                                    <s-td style="text-align: center;"><s-button onclick="window.location.href='http://localhost:65370/editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
+                                    <s-td style="text-align: center;"><s-button onclick="window.location.href=window.location+'editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
                                 </s-tr>
                             </s-tbody>
                             {% endfor %}

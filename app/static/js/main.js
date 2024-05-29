@@ -31,6 +31,10 @@ window.onload = function () {
     }
 };
 
+function go_editor(nid){
+    window.location.href='http://'+window.location+'editor?id='+nid
+}
+
 function sendRequestCheck() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
