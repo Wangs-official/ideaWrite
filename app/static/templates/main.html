@@ -210,13 +210,18 @@
                     <h2>💡</h2>
                     <h3>我的灵感</h3>
                     <b>当愿望过于强烈时,灯泡就会出现在人的脑袋上...</b><br><br>
-                    <s-scroll-view>
-                        <div style="height: 1080px;width: 2200px">
-
-                        </div>
-                    </s-scroll-view>
-                </div>
-
+                    <div class="wrapper">
+                        {% for ideainfo in IdeaInfo %}
+                        <s-card type="filled" id="{{ideainfo.id}}" style="width: 500px;margin-left: 20px;">
+                            <div slot="headline">{{ideainfo.title}}</div>
+                            <div slot="subhead" style="size: 10px;">创建于:{{ideainfo.createtime}}</div>
+                            <div slot="text" style="margin-bottom: 10px;">{{ideainfo.text}}</div>
+                            <div slot="text"><s-chip>{{ideainfo.lable}}</s-chip></div>
+                            <s-button slot="action" type="outlined">删除</s-button>
+                            <s-button slot="action">编辑</s-button>
+                        </s-card>
+                        {% endfor %}
+                    </div>
                 <div id="Sync" , class="view_tab" style="padding: 20px;">
                     <h2>☁️</h2>
                     <h3>云上同步</h3>

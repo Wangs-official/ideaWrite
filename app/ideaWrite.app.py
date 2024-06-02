@@ -9,7 +9,7 @@ import requests
 import time
 
 versioncode = json.loads(open("../version.json").read())["version"]
-api_url = 'http://localhost:65371'
+api_url = 'http://localhost:65371/'
 
 app = Flask(__name__,template_folder='static/templates')
 
@@ -25,7 +25,13 @@ def index_page(LTime = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(json.lo
             NovelInfo = ''
         elif ni_res.status_code == 500:
             return render_template('error.html' , Error_info = ni_res.text , VersionCode = versioncode,statuscode = ni_res.status_code)
-        return render_template('main.html', versionCode=versioncode,lastlogin=LTime,NovelInfo=NovelInfo)
+        
+        idea_res = requests.get(f'{api_url}/get/idea')
+        if idea_res.status_code == 200:
+            ideainfo = json.loads(idea_res.text)
+        elif ni_res.status_code == 500:
+            return render_template('error.html' , Error_info = idea_res.text , VersionCode = versioncode,statuscode = idea_res.status_code)
+        return render_template('main.html', versionCode=versioncode,lastlogin=LTime,NovelInfo=NovelInfo,IdeaInfo=ideainfo)
 
 @app.route('/setup')
 def setup():

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# author:Wangs_official@MewCako
 from flask import Flask, render_template, request, send_from_directory , jsonify , session , redirect , url_for
 import os
 from werkzeug.serving import run_simple
@@ -7,6 +10,7 @@ from flask_cors import CORS
 import yaml
 import json
 import shutil
+import random
 
 app = Flask(__name__)
 CORS(app)
@@ -39,7 +43,6 @@ def get_novel():
         c = conn.cursor()
         cursor = c.execute('SELECT * FROM MAIN')
         for cur in cursor:
-            print(cur)
             try:
                 if len(cur[3]) == 0:
                     # No Novel
@@ -71,6 +74,42 @@ def get_novel():
                 
     except Exception as e:
          return jsonify({'PythonErrorInfo':str(e)}),500
+    
+@app.route('/get/idea')
+def get_idea():
+    try:
+        returninfo = []
+        conn = sqlite3.connect('./data/idea.db')
+        c = conn.cursor()
+        cursor = c.execute('SELECT * FROM IDEA')
+        for row in cursor:
+            iid = row[0]
+            title = row[1]
+            text = row[2]
+            lable = row[3]
+            createtime = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(row[4]))
+            returninfo.append({'id':iid,'title':title,'text':text,'lable':lable,'createtime':createtime})
+        return returninfo
+    except Exception as e:
+        return jsonify({'PythonErrorInfo':str(e)}),500
+        
+@app.route('/create/idea',methods=['GET'])
+def create_idea():
+    try:
+        title = request.args.get('title')
+        text = request.args.get('text')
+        lable = request.args.get('lable')
+        conn = sqlite3.connect('./data/idea.db')
+        id = random.randint(1234567890,9876543210)
+        cursor = conn.cursor()
+        sql = "INSERT INTO IDEA (IdeaID,Title,Text,Lable,CreateTime) VALUES (?, ?, ?, ?, ?)"
+        data = (id, title, text, lable, int(time.time()))
+        cursor.execute(sql, data)
+        conn.commit()
+        return {'status':'ok','id':id}
+    except Exception as e:
+        return jsonify({'PythonErrorInfo':str(e)}),500
+        
 
 @app.route('/create/novel', methods=['GET'])
 def create_novel():
@@ -80,7 +119,6 @@ def create_novel():
         novelid_b =  ',' + request.args.get('id')
         title = request.args.get('title')
         about = request.args.get('about')
-
         conn = sqlite3.connect('./data/main.db')
         c = conn.cursor()
         cursor = c.execute("select * from MAIN limit 1;")
