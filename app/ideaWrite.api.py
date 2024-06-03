@@ -35,6 +35,44 @@ def start():
     conn.commit()
     return {'LastLogin':LastLogin}
 
+@app.route('/get/dashboard')
+def get_dashboard(alltext_o = 0):
+    try:
+        conn = sqlite3.connect('./data/main.db')
+        c = conn.cursor()
+        cursor = c.execute("select * from MAIN limit 1;")
+        for row in cursor:
+            jt = row[1]
+            lt = row[2]
+            xs = row[3].split(',')
+            xs_o = row[3]
+        Use_Time_Day = int((lt-jt)/86400)
+        All_Book = 0
+        if len(str(xs_o)) > 4:
+            All_Book = len(xs)
+        if not All_Book == 0:
+            for nid in xs:
+                file_list = os.listdir(f'data/novel/{nid}/chapter/')
+                for file_name in file_list:
+                    if file_name.endswith('.txt'):
+                        file_path = os.path.join(f'data/novel/{nid}/chapter/', file_name)
+                        with open(file_path, 'r', encoding='utf-8') as file:
+                            content = file.read()
+                            word_count = len(content)
+                            alltext_o += word_count
+        else:
+            alltext_o == 0
+        conn = sqlite3.connect('./data/idea.db')
+        c = conn.cursor()
+        cursor = c.execute('SELECT * FROM IDEA')
+        All_idea = 0
+        for row in cursor:
+            All_idea = All_idea + 1
+        print(cursor)
+        return {'Use_Time_Day':Use_Time_Day,'All_Book':All_Book,'All_Text':alltext_o,'All_Think':All_idea}
+    except Exception as e:
+        return jsonify({'PythonErrorInfo':str(e)}),500
+
 @app.route('/get/novel')
 def get_novel():
     try:
@@ -45,10 +83,9 @@ def get_novel():
         for cur in cursor:
             try:
                 if len(cur[3]) == 0:
-                    # No Novel
-                    return {'novel': None}, 404
+                    return returninfo
             except TypeError:
-                    return {'novel': None}, 404
+                    return returninfo
             else:
                 conn = sqlite3.connect('./data/main.db')
                 c = conn.cursor()
@@ -58,7 +95,7 @@ def get_novel():
                 for nid in NovelID:
                     with open(f'data/novel/{nid}/info.yml', 'r', encoding='utf-8') as f:
                         y = yaml.safe_load(f)
-                        ctime = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(y['CreateTime']))
+                        ctime = time.strftime("%Y/%m/%d %H:%M", time.localtime(y['CreateTime']))
                         ac = len(os.listdir(f'data/novel/{nid}/chapter/'))
                         alltext_o = 0
                         file_list = os.listdir(f'data/novel/{nid}/chapter/')
@@ -87,7 +124,7 @@ def get_idea():
             title = row[1]
             text = row[2]
             lable = row[3]
-            createtime = time.strftime("%Y/%m/%d %H:%M:%S", time.localtime(row[4]))
+            createtime = time.strftime("%Y/%m/%d %H:%M", time.localtime(row[4]))
             returninfo.append({'id':iid,'title':title,'text':text,'lable':lable,'createtime':createtime})
         return returninfo
     except Exception as e:
@@ -119,6 +156,13 @@ def create_novel():
         novelid_b =  ',' + request.args.get('id')
         title = request.args.get('title')
         about = request.args.get('about')
+        os.makedirs(f'data/novel/{novelid}')
+        os.makedirs(f'data/novel/{novelid}/chapter')
+        os.makedirs(f'data/novel/{novelid}/settings')
+        data = {'id':novelid,'title':title,'about':about,'CreateTime':int(time.time())}
+        with open(f'data/novel/{novelid}/info.yml', 'w', encoding='utf-8') as f:
+            yaml.dump(data=data, stream=f, allow_unicode=True)
+        f.close
         conn = sqlite3.connect('./data/main.db')
         c = conn.cursor()
         cursor = c.execute("select * from MAIN limit 1;")
@@ -132,14 +176,6 @@ def create_novel():
         elif not FirstUse:
             c.execute(f"UPDATE MAIN set NovelID = '{novelid_b}' where ID=1")
         conn.commit()
-        
-        os.makedirs(f'data/novel/{novelid}')
-        os.makedirs(f'data/novel/{novelid}/chapter')
-        os.makedirs(f'data/novel/{novelid}/settings')
-        data = {'id':novelid,'title':title,'about':about,'CreateTime':int(time.time())}
-        with open(f'data/novel/{novelid}/info.yml', 'w', encoding='utf-8') as f:
-            yaml.dump(data=data, stream=f, allow_unicode=True)
-        f.close
         return {'status':'ok'}
     except Exception as e:
          return jsonify({'PythonErrorInfo':str(e)}),500
