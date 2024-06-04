@@ -68,9 +68,9 @@ def get_dashboard(alltext_o = 0):
         All_idea = 0
         for row in cursor:
             All_idea = All_idea + 1
-        print(cursor)
         return {'Use_Time_Day':Use_Time_Day,'All_Book':All_Book,'All_Text':alltext_o,'All_Think':All_idea}
     except Exception as e:
+        print(f"出现异常:{e}")
         return jsonify({'PythonErrorInfo':str(e)}),500
 
 @app.route('/get/novel')
@@ -110,6 +110,7 @@ def get_novel():
                 return returninfo
                 
     except Exception as e:
+         print(f"出现异常:{e}")
          return jsonify({'PythonErrorInfo':str(e)}),500
     
 @app.route('/get/idea')
@@ -128,6 +129,7 @@ def get_idea():
             returninfo.append({'id':iid,'title':title,'text':text,'lable':lable,'createtime':createtime})
         return returninfo
     except Exception as e:
+        print(f"出现异常:{e}")
         return jsonify({'PythonErrorInfo':str(e)}),500
         
 @app.route('/create/idea',methods=['GET'])
@@ -145,6 +147,7 @@ def create_idea():
         conn.commit()
         return {'status':'ok','id':id}
     except Exception as e:
+        print(f"出现异常:{e}")
         return jsonify({'PythonErrorInfo':str(e)}),500
         
 
@@ -178,6 +181,7 @@ def create_novel():
         conn.commit()
         return {'status':'ok'}
     except Exception as e:
+         print(f"出现异常:{e}")
          return jsonify({'PythonErrorInfo':str(e)}),500
     
 @app.route('/del/novel')
@@ -202,6 +206,20 @@ def del_novel():
         shutil.rmtree(f'data/novel/{willdel}')
         return jsonify({'status':'ok'})
     except Exception as e:
+        print(f"出现异常:{e}")
+        return jsonify({'PythonErrorInfo':str(e)}),500
+
+@app.route('/del/idea')
+def del_idea():
+    try:
+        willdel = request.args.get('id')
+        conn = sqlite3.connect('./data/idea.db')
+        c = conn.cursor()
+        c.execute(f'delete from IDEA where IdeaId={willdel}')
+        conn.commit()
+        return jsonify({'status':'ok'})
+    except Exception as e:
+        print(f"出现异常:{e}")
         return jsonify({'PythonErrorInfo':str(e)}),500
 
 if __name__ == "__main__":

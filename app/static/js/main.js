@@ -52,4 +52,26 @@ function sendRequestCheck() {
     xhttp.send();
   }
   setInterval(sendRequestCheck, 1000);
-  
+
+  function callapi(path) {
+    return fetch('http://localhost:65371' + path)
+      .then(response => {
+        const statusCode = response.status;
+        return statusCode;
+      });
+  }
+
+  function delete_idea(iid) {
+    let confirmed = window.confirm("🥸 你确定要删除这个灵感吗?\n删掉就再也回不来了");
+    if (confirmed) {
+      callapi('/del/idea?id=' + iid)
+        .then(statusCode => {
+          if (statusCode == 200) {
+            alert('✅ 删除灵感成功');
+            location.reload();
+          } else {
+            alert('❎ 请求API失败,请查看后端控制台的输出' + statusCode);
+          }
+        });
+    }
+  }

@@ -14,15 +14,6 @@
             margin: 0;
             -webkit-tap-highlight-color: transparent;
         }
-
-        :not(:defined) {
-            display: none;
-        }
-
-        .wrapper {
-            height: 500px;
-            overflow-y: scroll;
-        }
     </style>
 </head>
 <script src="static/js/sober.min.js"></script>
@@ -210,22 +201,42 @@
                     <h2>💡</h2>
                     <h3>我的灵感</h3>
                     <b>当愿望过于强烈时,灯泡就会出现在人的脑袋上...</b><br><br>
+                    <s-fab extended="true" onclick="document.querySelector('#newidea_dialog').show()">
+                        <s-icon type="add" slot="start"></s-icon>
+                        记录新灵感
+                    </s-fab><br><br>
                     <div class="wrapper">
                         {% for ideainfo in IdeaInfo %}
-                        <s-card type="filled" id="{{ideainfo.id}}" style="width: 500px;margin-left: 20px;">
+                        <s-card type="filled" style="width: 500px;margin-left: 20px;">
                             <div slot="headline">{{ideainfo.title}}</div>
                             <div slot="subhead" style="size: 10px;">创建于:{{ideainfo.createtime}}</div>
                             <div slot="text" style="margin-bottom: 10px;">{{ideainfo.text}}</div>
                             <div slot="text"><s-chip>{{ideainfo.lable}}</s-chip></div>
-                            <s-button slot="action" type="outlined">删除</s-button>
+                            <s-button slot="action" type="outlined" onclick="delete_idea('{{ideainfo.id}}')">删除</s-button>
                             <s-button slot="action">编辑</s-button>
                         </s-card>
                         {% endfor %}
                     </div>
+                </div>
                 <div id="Sync" , class="view_tab" style="padding: 20px;">
                     <h2>☁️</h2>
                     <h3>云上同步</h3>
                     <b>备份数据到网盘</b><br><br>
+                    <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">🐟 连接到 阿里云盘</div>
+                        <div slot="subhead">反正空间够用</div>
+                        <s-button slot="action" onclick="document.querySelector('#cloudsync_aliyun_dialog').show()">查看设置</s-button>
+                    </s-card>
+                    <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">📀 连接到 WebDAV</div>
+                        <div slot="subhead">例如坚果云</div>
+                        <s-button slot="action" onclick="document.querySelector('#cloudsync_webdav_dialog').show()">查看设置</s-button>
+                    </s-card>
+                    <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
+                        <div slot="headline">🐱 连接到 GitHub 仓库</div>
+                        <div slot="subhead">正在建设中</div>
+                        <s-button slot="action" onclick="customElements.get('s-snackbar').show('再点就不礼貌了😠')">点了也没用</s-button>
+                    </s-card>
                 </div>
 
                 <div id="Settings" , class="view_tab" style="padding: 20px;">
@@ -254,6 +265,28 @@
                     <div slot="headline"> 创建新小说 </div>
                     <s-button slot="action" type="text">取消</s-button>
                     <s-button slot="action" type="text">确定</s-button>
+                </s-dialog>
+                <s-dialog id="newidea_dialog" style="width: 1000px;">
+                    <div slot="headline"> 记录新灵感 </div>
+                    <div slot="text">
+                    <h6>标题</h6>
+                    <s-text-field>
+                        <input type="text" id="newidea_d_title">
+                    </s-text-field>
+                    <br><br>
+                    <h6>标签</h6>
+                    <s-text-field>
+                        <input type="text" id="newidea_d_lable">
+                    </s-text-field>
+                    <br><br>
+                    <h6>内容</h6>
+                    <s-text-field>
+                        <textarea></textarea>
+                    </s-text-field>
+                </div>
+                    
+                    <s-button slot="action" type="text">取消</s-button>
+                    <s-button slot="action" type="text">记录</s-button>
                 </s-dialog>
                 <!--dialog end-->
             </div>

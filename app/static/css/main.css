@@ -26,6 +26,11 @@
     text-align: center;
 }
 
+.wrapper {
+    height: 500px;
+    overflow-y: scroll;
+}
+
 @media (max-width:1370px) {
     .card_block {
         margin-top: 15px;
