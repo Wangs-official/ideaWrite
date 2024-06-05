@@ -27,7 +27,7 @@
 }
 
 .wrapper {
-    height: 500px;
+    height: calc(100vh);
     overflow-y: scroll;
 }
 
@@ -49,5 +49,25 @@
         z-index: 9999;
         padding: 150px;
         text-align: center;
+    }
+}
+
+#waterfall-container {
+    height: 100000px !important;
+    column-count: 4;
+    column-gap: 10px;
+}
+
+.wf-card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+@media (max-width: 1274px) {
+    .wf-card {
+        break-inside: avoid;
+        margin-bottom: 20px;
+        width: 100%;
     }
 }

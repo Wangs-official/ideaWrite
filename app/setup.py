@@ -32,7 +32,7 @@ c.execute('''CREATE TABLE IDEA
        (IdeaID INT PRIMARY KEY     NOT NULL,
        Title           TEXT,
        Text            TEXT,
-       Lable        TEXT,
+       Label        TEXT,
        CreateTime         INT);''')
 print ("灵感数据库创建成功")
 conn.commit()
@@ -40,7 +40,7 @@ conn.close()
 
 import yaml
 f = open("data/settings/settings.yml", "w")
-data = {'editor':[{'text_size':14,'text_background':'','autosave':'60'}],'cloud_sync':[{'enable':False}]}
+data = {'editor':[{'text_size':14,'editor_background':'','editor_bg_opacity':0,'autosave':'60'}],'cloud_sync':[{'enable':False}]}
 with open('data/settings/settings.yml', 'w', encoding='utf-8') as f:
     yaml.dump(data=data, stream=f, allow_unicode=True)
 print("生成设置文件完成")

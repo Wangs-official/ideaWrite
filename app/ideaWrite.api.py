@@ -124,9 +124,9 @@ def get_idea():
             iid = row[0]
             title = row[1]
             text = row[2]
-            lable = row[3]
+            label = row[3]
             createtime = time.strftime("%Y/%m/%d %H:%M", time.localtime(row[4]))
-            returninfo.append({'id':iid,'title':title,'text':text,'lable':lable,'createtime':createtime})
+            returninfo.append({'id':iid,'title':title,'text':text,'label':label,'createtime':createtime})
         return returninfo
     except Exception as e:
         print(f"出现异常:{e}")
@@ -137,12 +137,14 @@ def create_idea():
     try:
         title = request.args.get('title')
         text = request.args.get('text')
-        lable = request.args.get('lable')
+        label = request.args.get('label')
+        if title == None or text == None or label == None:
+            return jsonify({'APIErrorInfo':'缺少参数'}),500
         conn = sqlite3.connect('./data/idea.db')
         id = random.randint(1234567890,9876543210)
         cursor = conn.cursor()
-        sql = "INSERT INTO IDEA (IdeaID,Title,Text,Lable,CreateTime) VALUES (?, ?, ?, ?, ?)"
-        data = (id, title, text, lable, int(time.time()))
+        sql = "INSERT INTO IDEA (IdeaID,Title,Text,Label,CreateTime) VALUES (?, ?, ?, ?, ?)"
+        data = (id, title, text, label, int(time.time()))
         cursor.execute(sql, data)
         conn.commit()
         return {'status':'ok','id':id}

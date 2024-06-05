@@ -16,8 +16,7 @@
         }
     </style>
 </head>
-<script src="static/js/sober.min.js"></script>
-<script src="static/js/main.js"></script>
+<script src="static/js/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="static/css/main.css">
 <link rel="stylesheet" href="static/css/bootstrap.min.css">
 
@@ -169,7 +168,7 @@
                         <s-icon type="add" slot="start"></s-icon>
                         创建新小说
                     </s-fab><br><br>
-                    <div class="wrapper">     
+                    <div class="wrapper">
                         <s-table>
                             <s-thead>
                                 <s-tr>
@@ -186,14 +185,19 @@
                                     <s-td style="text-align: center;">{{novelinfo.title}}</s-td>
                                     <s-td style="text-align: center;">{{novelinfo.about}}</s-td>
                                     <s-td style="text-align: center;">{{novelinfo.CreateTime}}</s-td>
-                                    <s-td style="text-align: center;">共{{novelinfo.allChapter}}章/共{{novelinfo.allText}}字</s-td>
-                                    <s-td style="text-align: center;"><s-button onclick="window.location.href=window.location+'editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
+                                    <s-td
+                                        style="text-align: center;">共{{novelinfo.allChapter}}章/共{{novelinfo.allText}}字</s-td>
+                                    <s-td style="text-align: center;"><s-button
+                                            onclick="window.location.href=window.location+'editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
                                 </s-tr>
                             </s-tbody>
                             {% endfor %}
                         </s-table>
                         <br>
-                        <b style="color: gray;">Tips:打开编辑器,在编辑器的 编辑资料 页面就可以删除小说了,别问,问就是这里放不下<br>如果你的小说在 app/data/novel 文件夹下,但是没有出现在列表里,这种情况一般是非常规导入小说后发生的,请在 设置->扫描小说文件夹 来刷新列表<br>请一定不要直接操作小说文件夹(例如直接删除),这是和数据库挂钩的,直接删除等操作会导致读取不出来小说列表(直接报错),没有专业环境修复很困难<br>只要你不乱动,好好在前端用,出问题的概率约等于零 :)</b>
+                        <b style="color: gray;">Tips:打开编辑器,在编辑器的 编辑资料 页面就可以删除小说了,别问,问就是这里放不下<br>如果你的小说在 app/data/novel
+                            文件夹下,但是没有出现在列表里,这种情况一般是非常规导入小说后发生的,请在 设置->扫描小说文件夹
+                            来刷新列表<br>请一定不要直接操作小说文件夹(例如直接删除),这是和数据库挂钩的,直接删除等操作会导致读取不出来小说列表(直接报错),没有专业环境修复很困难<br>只要你不乱动,好好在前端用,出问题的概率约等于零
+                            :)</b>
                     </div>
                 </div>
 
@@ -206,16 +210,23 @@
                         记录新灵感
                     </s-fab><br><br>
                     <div class="wrapper">
-                        {% for ideainfo in IdeaInfo %}
-                        <s-card type="filled" style="width: 500px;margin-left: 20px;">
-                            <div slot="headline">{{ideainfo.title}}</div>
-                            <div slot="subhead" style="size: 10px;">创建于:{{ideainfo.createtime}}</div>
-                            <div slot="text" style="margin-bottom: 10px;">{{ideainfo.text}}</div>
-                            <div slot="text"><s-chip>{{ideainfo.lable}}</s-chip></div>
-                            <s-button slot="action" type="outlined" onclick="delete_idea('{{ideainfo.id}}')">删除</s-button>
-                            <s-button slot="action">编辑</s-button>
-                        </s-card>
-                        {% endfor %}
+                        <b style="color: gray;">下面可能会有一大块空白...我不知道怎么获取这个瀑布流的高度,所以就设置了一个很大的数</b>
+                        <br><br>
+                        <div id="waterfall-container">
+                            {% for ideainfo in IdeaInfo %}
+                            <s-card type="filled" class="wf-card">
+                                <div slot="headline">{{ideainfo.title}}</div>
+                                <div slot="subhead" style="size: 10px;">创建于:{{ideainfo.createtime}}</div>
+                                <div slot="text"
+                                    style="margin-bottom: 10px;word-wrap: break-word;word-break: break-all;">
+                                    {{ideainfo.text}}</div>
+                                <div slot="text"><s-chip>{{ideainfo.label}}</s-chip></div>
+                                <s-button slot="action" type="outlined"
+                                    onclick="delete_idea('{{ideainfo.id}}')">删除</s-button>
+                                <s-button slot="action">编辑</s-button>
+                            </s-card>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
                 <div id="Sync" , class="view_tab" style="padding: 20px;">
@@ -225,17 +236,20 @@
                     <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
                         <div slot="headline">🐟 连接到 阿里云盘</div>
                         <div slot="subhead">反正空间够用</div>
-                        <s-button slot="action" onclick="document.querySelector('#cloudsync_aliyun_dialog').show()">查看设置</s-button>
+                        <s-button slot="action"
+                            onclick="document.querySelector('#cloudsync_aliyun_dialog').show()">查看设置</s-button>
                     </s-card>
                     <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
                         <div slot="headline">📀 连接到 WebDAV</div>
                         <div slot="subhead">例如坚果云</div>
-                        <s-button slot="action" onclick="document.querySelector('#cloudsync_webdav_dialog').show()">查看设置</s-button>
+                        <s-button slot="action"
+                            onclick="document.querySelector('#cloudsync_webdav_dialog').show()">查看设置</s-button>
                     </s-card>
                     <s-card type="filled" style="width: 500px;margin-left: 20px;" class="card_block">
                         <div slot="headline">🐱 连接到 GitHub 仓库</div>
                         <div slot="subhead">正在建设中</div>
-                        <s-button slot="action" onclick="customElements.get('s-snackbar').show('再点就不礼貌了😠')">点了也没用</s-button>
+                        <s-button slot="action"
+                            onclick="customElements.get('s-snackbar').show('再点就不礼貌了😠')">点了也没用</s-button>
                     </s-card>
                 </div>
 
@@ -268,30 +282,33 @@
                 </s-dialog>
                 <s-dialog id="newidea_dialog" style="width: 1000px;">
                     <div slot="headline"> 记录新灵感 </div>
+                    <b style="color: gray;" slot="text">Tips:记录点小点子就行了,要不太长了...</b>
                     <div slot="text">
-                    <h6>标题</h6>
-                    <s-text-field>
-                        <input type="text" id="newidea_d_title">
-                    </s-text-field>
-                    <br><br>
-                    <h6>标签</h6>
-                    <s-text-field>
-                        <input type="text" id="newidea_d_lable">
-                    </s-text-field>
-                    <br><br>
-                    <h6>内容</h6>
-                    <s-text-field>
-                        <textarea></textarea>
-                    </s-text-field>
-                </div>
-                    
+                        <h6>标题</h6>
+                        <s-text-field>
+                            <input type="text" id="newidea_d_title">
+                        </s-text-field>
+                        <br><br>
+                        <h6>标签</h6>
+                        <s-text-field>
+                            <input type="text" id="newidea_d_label">
+                        </s-text-field>
+                        <br><br>
+                        <h6>内容</h6>
+                        <s-text-field>
+                            <textarea id="newidea_d_text"></textarea>
+                        </s-text-field>
+                    </div>
                     <s-button slot="action" type="text">取消</s-button>
-                    <s-button slot="action" type="text">记录</s-button>
+                    <s-button slot="action" type="text" id="newidea_record_button">记录</s-button>
                 </s-dialog>
                 <!--dialog end-->
             </div>
         </div>
     </s-page>
 </body>
+<script src="assets/js/masonry.pkgd.js"></script>
+<script src="static/js/sober.min.js"></script>
+<script src="static/js/main.js"></script>
 
 </html>

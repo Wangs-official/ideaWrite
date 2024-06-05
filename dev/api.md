@@ -73,7 +73,7 @@
        {
            "createtime": "1970/01/01 8:00",
            "id": 1000000000,
-           "lable": "灵感",
+           "label": "灵感",
            "text": "这是一个测试的灵感",
            "title": "测试"
        }
@@ -84,7 +84,7 @@
    | :--------: | :------: | :----: |
    | createtime | 创建时间 | string |
    |     id     |  灵感ID  |  int   |
-   |   lable    | 灵感标签 | string |
+   |   label    | 灵感标签 | string |
    |    text    | 灵感内容 | string |
    |   title    | 灵感标题 | string |
    
@@ -126,7 +126,7 @@
 
 2. `/create/idea`
 
-   - 参数: `?title={标题}&text={内容}&lable={标签}`
+   - 参数: `?title={标题}&text={内容}&label={标签}`
 
    - 用途: 创建灵感
 
