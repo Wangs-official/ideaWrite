@@ -1,7 +1,9 @@
 .DS_Store
 *.pyc
 
-app/data/*
-app/settings.yml
-app/cloud_sync.yml
+app/data/novel/*
+app/data/settings/*
+app/data/main.db
+app/data/idea.db
+
 app/install.lock

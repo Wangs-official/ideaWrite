@@ -168,13 +168,16 @@ def create_novel():
         novelid_b = ',' + request.args.get('id')
         title = request.args.get('title')
         about = request.args.get('about')
+        tmp_exam = request.args.get('template_example')
+        if novelid is None or title is None or about is None or about is None or tmp_exam is None:
+            return jsonify({'APIErrorInfo': '缺少参数'}), 500
         os.makedirs(f'data/novel/{novelid}')
         os.makedirs(f'data/novel/{novelid}/chapter')
         os.makedirs(f'data/novel/{novelid}/settings')
         data = {'id': novelid, 'title': title, 'about': about, 'CreateTime': int(time.time())}
         with open(f'data/novel/{novelid}/info.yml', 'w', encoding='utf-8') as f:
             yaml.dump(data=data, stream=f, allow_unicode=True)
-        f.close
+            f.close()
         conn = sqlite3.connect('./data/main.db')
         c = conn.cursor()
         cursor = c.execute("select * from MAIN limit 1;")
@@ -188,6 +191,13 @@ def create_novel():
         elif not FirstUse:
             c.execute(f"UPDATE MAIN set NovelID = '{novelid_b}' where ID=1")
         conn.commit()
+        if tmp_exam:
+            with open(f'data/novel/{novelid}/chapter/第一章 示例.txt', 'w', encoding='utf-8') as f:
+                f.write("   这是一个示例,你可以自由编辑这里面的内容,或者把这个示例删掉")
+                f.close()
+            with open(f'data/novel/{novelid}/settings/示例.txt', 'w', encoding='utf-8') as f:
+                f.write("   这是一个示例,这里可以写世界观,或者人设,你可以自由编辑这里面的内容,或者把这个示例删掉")
+                f.close()
         return {'status': 'ok'}
     except Exception as e:
         print(f"出现异常:{e}")
@@ -229,6 +239,31 @@ def del_idea():
         c.execute(f'delete from IDEA where IdeaId={willdel}')
         conn.commit()
         return jsonify({'status': 'ok'})
+    except Exception as e:
+        print(f"出现异常:{e}")
+        return jsonify({'PythonErrorInfo': str(e)}), 500
+
+
+@app.route('/edit/idea')
+def edit_idea():
+    try:
+        willedit = request.args.get('id')
+        new_title = request.args.get('title')
+        new_text = request.args.get('text')
+        new_label = request.args.get('label')
+        if willedit is None or new_title is None or new_text is None or new_label is None:
+            return jsonify({'APIErrorInfo': '缺少参数'}), 500
+        conn = sqlite3.connect('./data/idea.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM IDEA WHERE IdeaID=?", (willedit,))
+        idea = c.fetchone()
+        if idea:
+            c.execute("UPDATE IDEA SET Title=?, Text=?, Label=? WHERE IdeaID=?",
+                      (new_title, new_text, new_label, willedit))
+            conn.commit()
+            return jsonify({'status': 'ok'})
+        else:
+            return jsonify({'APIErrorInfo': '此ID不存在'}), 500
     except Exception as e:
         print(f"出现异常:{e}")
         return jsonify({'PythonErrorInfo': str(e)}), 500

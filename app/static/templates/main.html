@@ -134,7 +134,7 @@
                     </s-card>
                 </div>
                 <!--Pages-->
-                <div id="Dashboard" , class="view_tab" style="padding: 20px;">
+                <div id="Dashboard" class="view_tab" style="padding: 20px;">
                     <h2>📈</h2>
                     <h3>仪表盘</h3>
                     <b>看看你用ideaWrite做了什么</b><br><br>
@@ -160,7 +160,7 @@
                     </s-card>
                 </div>
 
-                <div id="Novel" , class="view_tab" style="padding: 20px;">
+                <div id="Novel" class="view_tab" style="padding: 20px;">
                     <h2>📚</h2>
                     <h3>我的小说</h3>
                     <b>不要当鸽子哦</b><br><br>
@@ -201,15 +201,15 @@
                     </div>
                 </div>
 
-                <div id="Idea" , class="view_tab" style="padding: 20px;">
+                <div id="Idea" class="view_tab" style="padding: 20px;">
+                    <div class="wrapper">
                     <h2>💡</h2>
                     <h3>我的灵感</h3>
                     <b>当愿望过于强烈时,灯泡就会出现在人的脑袋上...</b><br><br>
-                    <s-fab extended="true" onclick="document.querySelector('#newidea_dialog').show()">
+                    <s-fab extended="true" onclick="document.querySelector('#newidea_dialog').show()" style="margin-left:10px;">
                         <s-icon type="add" slot="start"></s-icon>
                         记录新灵感
                     </s-fab><br><br>
-                    <div class="wrapper">
                         <b style="color: gray;">下面可能会有一大块空白...我不知道怎么获取这个瀑布流的高度,所以就设置了一个很大的数</b>
                         <br><br>
                         <div id="waterfall-container">
@@ -229,7 +229,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="Sync" , class="view_tab" style="padding: 20px;">
+                <div id="Sync" class="view_tab" style="padding: 20px;">
                     <h2>☁️</h2>
                     <h3>云上同步</h3>
                     <b>备份数据到网盘</b><br><br>
@@ -253,13 +253,13 @@
                     </s-card>
                 </div>
 
-                <div id="Settings" , class="view_tab" style="padding: 20px;">
+                <div id="Settings" class="view_tab" style="padding: 20px;">
                     <h2>💻</h2>
                     <h3>设置</h3>
                     <b>调整ideaWrite的设置</b><br><br>
                 </div>
 
-                <div id="About" , class="view_tab" style="padding: 20px;">
+                <div id="About" class="view_tab" style="padding: 20px;">
                     <h2>✍🏻</h2>
                     <h3>关于ideaWrite</h3>
                     <b>当前版本:{{versionCode}}</b><br>
@@ -277,8 +277,21 @@
                 <!--dialog-->
                 <s-dialog id="newbook_dialog">
                     <div slot="headline"> 创建新小说 </div>
+                    <div slot="text">
+                        <h6>标题</h6>
+                        <s-text-field>
+                            <input type="text" id="newnovel_d_title">
+                        </s-text-field>
+                        <br><br>
+                        <h6>描述</h6>
+                        <s-text-field>
+                            <textarea id="newnovel_d_about"></textarea>
+                        </s-text-field>
+                        <br><br>
+
+                    </div>
                     <s-button slot="action" type="text">取消</s-button>
-                    <s-button slot="action" type="text">确定</s-button>
+                    <s-button slot="action" type="text" id="newnovel_record_button">创建</s-button>
                 </s-dialog>
                 <s-dialog id="newidea_dialog" style="width: 1000px;">
                     <div slot="headline"> 记录新灵感 </div>

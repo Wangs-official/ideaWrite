@@ -118,7 +118,7 @@
 
 1. `/create/novel`
 
-   - 参数: `?id={小说ID}&title={标题}&about={描述}`
+   - 参数: `?id={小说ID}&title={标题}&about={描述}&template_example={是否创建示例模板(Bool)}`
 
    - 用途: 创建小说
 
@@ -146,4 +146,12 @@
 
    - 用途: 删除灵感
 
+   - 返回值示例:`{"status":"ok"}`
+
+## 文件编辑
+
+1. `/edit/idea`
+
+   - 参数: `?id={需要修改的ideaID}&title={标题}&text={内容}&label={标签}`
+   - 用途: 编辑灵感内容
    - 返回值示例:`{"status":"ok"}`
