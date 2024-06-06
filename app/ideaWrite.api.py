@@ -164,12 +164,12 @@ def create_idea():
 def create_novel():
     try:
         FirstUse = ''
-        novelid = request.args.get('id')
-        novelid_b = ',' + request.args.get('id')
+        novelid = random.randint(1234567890, 9876543210)
+        novelid_b = ',' + str(novelid)
         title = request.args.get('title')
         about = request.args.get('about')
         tmp_exam = request.args.get('template_example')
-        if novelid is None or title is None or about is None or about is None or tmp_exam is None:
+        if title is None or about is None or about is None or tmp_exam is None:
             return jsonify({'APIErrorInfo': '缺少参数'}), 500
         os.makedirs(f'data/novel/{novelid}')
         os.makedirs(f'data/novel/{novelid}/chapter')
@@ -191,7 +191,7 @@ def create_novel():
         elif not FirstUse:
             c.execute(f"UPDATE MAIN set NovelID = '{novelid_b}' where ID=1")
         conn.commit()
-        if tmp_exam:
+        if tmp_exam == "True" :
             with open(f'data/novel/{novelid}/chapter/第一章 示例.txt', 'w', encoding='utf-8') as f:
                 f.write("   这是一个示例,你可以自由编辑这里面的内容,或者把这个示例删掉")
                 f.close()

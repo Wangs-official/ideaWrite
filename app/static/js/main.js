@@ -31,10 +31,6 @@ window.onload = function () {
     }
 };
 
-function go_editor(nid) {
-    window.location.href = 'http://' + window.location + 'editor?id=' + nid
-}
-
 function sendRequestCheck() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -56,23 +52,40 @@ setInterval(sendRequestCheck, 1000);
 function callapi(path) {
     return fetch('http://localhost:65371' + path)
         .then(response => {
-            const statusCode = response.status;
-            return statusCode;
+            return response.status;
         });
 }
 
 function delete_idea(iid) {
     let confirmed = window.confirm("🥸 你确定要删除这个灵感吗?\n删掉就再也回不来了");
     if (confirmed) {
-        callapi('/del/idea?id=' + iid)
+        callapi(`/del/idea?id=${iid}`)
             .then(statusCode => {
-                if (statusCode == 200) {
+                if (statusCode === 200) {
                     customElements.get('s-dialog').show('✅ 删除灵感成功\n将在一秒后刷新')
                     setTimeout("location.reload();", 1000)
                 } else {
                     customElements.get('s-dialog').show('❎ 请求API失败,请查看后端控制台的输出,状态码:' + statusCode + '\n点击空白处退出')
                 }
             });
+    }
+}
+
+function delete_novel(nid) {
+    let confirmed = window.confirm("🥸 你确定要删除这个小说吗?\n删掉就再也回不来了");
+    if (confirmed) {
+        let confirmed2 = window.confirm("⚠️ 警告：请确保这个小说被备份过了，备份是最好的，也是唯一的后悔药！\n继续删除点击 确定");
+            if (confirmed2) {
+                callapi(`/del/novel?id=${nid}`)
+                    .then(statusCode => {
+                        if (statusCode === 200) {
+                            customElements.get('s-dialog').show('✅ 删除小说成功\n将在一秒后刷新')
+                            setTimeout("location.reload();", 1000)
+                        } else {
+                            customElements.get('s-dialog').show('❎ 请求API失败,请查看后端控制台的输出,状态码:' + statusCode + '\n点击空白处退出')
+                        }
+                    });
+            }
     }
 }
 
@@ -84,9 +97,9 @@ document.getElementById('newidea_record_button').addEventListener('click', funct
         customElements.get('s-dialog').show('🤔 都需要填上哦\n点击空白处退出')
         return;
     }
-    callapi('/create/idea?title=' + title + "&label=" + label + "&text=" + text)
+    callapi(`/create/idea?title=${title}&label=${label}&text=${text}`)
         .then(statusCode => {
-            if (statusCode == 200) {
+            if (statusCode === 200) {
                 customElements.get('s-dialog').show('✅ 记录灵感成功\n将在一秒后刷新')
                 setTimeout("location.reload();", 1000)
             } else {
@@ -94,6 +107,45 @@ document.getElementById('newidea_record_button').addEventListener('click', funct
             }
         });
 });
+
+document.getElementById('newnovel_record_button').addEventListener('click', function () {
+    const title = document.getElementById('newnovel_d_title').value.trim();
+    const about = document.getElementById('newnovel_d_about').value.trim();
+
+    if (title === "" || about === "") {
+        customElements.get('s-dialog').show('🤔 都需要填上哦\n点击空白处退出')
+        return;
+    }
+    callapi(`/create/novel?title=${title}&about=${about}&template_example=False`)
+        .then(statusCode => {
+            if (statusCode === 200) {
+                customElements.get('s-dialog').show('✅ 创建小说成功\n将在一秒后刷新')
+                setTimeout("location.reload();", 1000)
+            } else {
+                customElements.get('s-dialog').show('❎ 请求API失败,请查看后端控制台的输出,状态码:' + statusCode + '\n点击空白处退出')
+            }
+        });
+});
+
+document.getElementById('newnovel_record_button_withtmp').addEventListener('click', function () {
+    const title = document.getElementById('newnovel_d_title').value.trim();
+    const about = document.getElementById('newnovel_d_about').value.trim();
+
+    if (title === "" || about === "") {
+        customElements.get('s-dialog').show('🤔 都需要填上哦\n点击空白处退出')
+        return;
+    }
+    callapi(`/create/novel?title=${title}&about=${about}&template_example=True`)
+        .then(statusCode => {
+            if (statusCode === 200) {
+                customElements.get('s-dialog').show('✅ 创建小说成功\n将在一秒后刷新')
+                setTimeout("location.reload();", 1000)
+            } else {
+                customElements.get('s-dialog').show('❎ 请求API失败,请查看后端控制台的输出,状态码:' + statusCode + '\n点击空白处退出')
+            }
+        });
+});
+
 
 $(document).ready(function() {
     $('#waterfall-container').masonry({

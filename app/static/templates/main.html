@@ -172,29 +172,29 @@
                         <s-table>
                             <s-thead>
                                 <s-tr>
-                                    <s-th style="text-align: center; width: 200px;">标题</s-th>
+                                    <s-th style="text-align: center; width: 200px;">书名</s-th>
                                     <s-th style="text-align: center;">描述</s-th>
                                     <s-th style="text-align: center;">创建时间</s-th>
                                     <s-th style="text-align: center;">总章节/总字数</s-th>
-                                    <s-th style="text-align: center;">操作</s-th>
+                                    <s-th style="text-align: left;">操作</s-th>
                                 </s-tr>
                             </s-thead>
                             {% for novelinfo in NovelInfo %}
                             <s-tbody>
                                 <s-tr>
-                                    <s-td style="text-align: center;">{{novelinfo.title}}</s-td>
+                                    <s-td style="text-align: center;" onclick="customElements.get('s-dialog').show('🤔 此小说ID为:\n{{novelinfo.id}}')">{{novelinfo.title}}</s-td>
                                     <s-td style="text-align: center;">{{novelinfo.about}}</s-td>
                                     <s-td style="text-align: center;">{{novelinfo.CreateTime}}</s-td>
                                     <s-td
                                         style="text-align: center;">共{{novelinfo.allChapter}}章/共{{novelinfo.allText}}字</s-td>
-                                    <s-td style="text-align: center;"><s-button
-                                            onclick="window.location.href=window.location+'editor?id={{novelinfo.id}}'">编辑</s-button></s-td>
+                                    <s-button onclick="window.location.href=window.location+'editor?id={{novelinfo.id}}'" style="text-align: center; margin: 10px">编辑</s-button>
+                                    <s-button onclick="delete_novel('{{novelinfo.id}}')" style="text-align: center; margin: 10px" type="outlined">删除</s-button>
                                 </s-tr>
                             </s-tbody>
                             {% endfor %}
                         </s-table>
                         <br>
-                        <b style="color: gray;">Tips:打开编辑器,在编辑器的 编辑资料 页面就可以删除小说了,别问,问就是这里放不下<br>如果你的小说在 app/data/novel
+                        <b style="color: gray;">Tips:点击书名查看小说ID<br>如果你的小说在 app/data/novel
                             文件夹下,但是没有出现在列表里,这种情况一般是非常规导入小说后发生的,请在 设置->扫描小说文件夹
                             来刷新列表<br>请一定不要直接操作小说文件夹(例如直接删除),这是和数据库挂钩的,直接删除等操作会导致读取不出来小说列表(直接报错),没有专业环境修复很困难<br>只要你不乱动,好好在前端用,出问题的概率约等于零
                             :)</b>
@@ -287,11 +287,10 @@
                         <s-text-field>
                             <textarea id="newnovel_d_about"></textarea>
                         </s-text-field>
-                        <br><br>
-
                     </div>
                     <s-button slot="action" type="text">取消</s-button>
                     <s-button slot="action" type="text" id="newnovel_record_button">创建</s-button>
+                    <s-button slot="action" type="text" id="newnovel_record_button_withtmp">创建并放入模板</s-button>
                 </s-dialog>
                 <s-dialog id="newidea_dialog" style="width: 1000px;">
                     <div slot="headline"> 记录新灵感 </div>
