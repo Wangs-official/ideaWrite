@@ -41,8 +41,8 @@ conn.close()
 import yaml
 
 f = open("data/settings/settings.yml", "w")
-data = {'editor': [{'text_size': 14, 'editor_background': '', 'editor_bg_opacity': 0, 'autosave': '60'}],
-        'cloud_sync': [{'enable': False}]}
+data = {'editor_text_size': 14, 'editor_background': '', 'editor_bg_opacity': 0, 'autosave': 60,
+        'cloud_sync_enable': False}
 with open('data/settings/settings.yml', 'w', encoding='utf-8') as f:
     yaml.dump(data=data, stream=f, allow_unicode=True)
 print("生成设置文件完成")

@@ -139,6 +139,19 @@ def get_idea():
         return jsonify({'PythonErrorInfo': str(e)}), 500
 
 
+@app.route('/get/settings')
+def get_settings():
+    try:
+        f = open("data/settings/settings.yml")
+        y = yaml.safe_load(f)
+        return jsonify({'editor_autosave': y["autosave"],
+                        'editor_background': y["editor_background"],
+                        'editor_bg_opacity': y["editor_bg_opacity"], 'text_size': y["editor_text_size"]})
+    except Exception as e:
+        print(f"出现异常:{e}")
+        return jsonify({'PythonErrorInfo': str(e)}), 500
+
+
 @app.route('/create/idea', methods=['GET'])
 def create_idea():
     try:
@@ -191,7 +204,7 @@ def create_novel():
         elif not FirstUse:
             c.execute(f"UPDATE MAIN set NovelID = '{novelid_b}' where ID=1")
         conn.commit()
-        if tmp_exam == "True" :
+        if tmp_exam == "True":
             with open(f'data/novel/{novelid}/chapter/第一章 示例.txt', 'w', encoding='utf-8') as f:
                 f.write("   这是一个示例,你可以自由编辑这里面的内容,或者把这个示例删掉")
                 f.close()
